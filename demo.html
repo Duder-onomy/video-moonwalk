@@ -2,15 +2,26 @@
     <head>
     </head>
     <body>
+
         <video id="formov">
             <source src="./trailer.mp4" type="video/mp4">
         </video>
+
+        <button id='goToNext'>GO TO NEXT</button>
+        <button id='goToPrevious'>GO TO PREV</button>
+        <button id='goToLast'>GO TO LAST</button>
+        <button id='goToFirst'>GO TO FIRST</button>
+        <button id='skipToLast'>SKIP TO LAST</button>
+        <button id='skipToFirst'>SKIP TO FIRST</button>
+
+        <br>
+
         <video id="backmov">
-            <source src="./trailer.mp4" type="video/mp4">
+            <source src="./trailer-rev-h264.mp4" type="video/mp4">
         </video>
+
         <script src="bundle.js"></script>
         <script>
-            setTimeout(function(){},4000);
             var videoTagFor = document.querySelector('#formov'),
                 videoTagBack = document.querySelector('#backmov'),
                 options = {
@@ -26,25 +37,91 @@
                         },
                         {
                             timeIndex : 30
+                        },
+                        {
+                            timeIndex : 52
                         }
                     ]
                 },
-                initializedVideoTagFor = new VideoFastForwardFor(videoTagFor, options),
-                initializedVideoTagBack = new VideoFastForwardRev(videoTagBack, options);
-            // // user scrolled up
-            setTimeout(initializedVideoTagFor.goToNext, 2000);
-            //setTimeout(initializedVideoTag.goToNext, 15000);
-            setTimeout(initializedVideoTagBack.goToNext, 14000);
-            // // user scrolled down
-            //setTimeout(initializedVideoTag.goToPrevious, 30000);
-            // initializedVideoTag.goToPrevious();
-            // setTimeout(function(){
-            //     initializedVideoTag.goToIndex(0)
-            // },13000);
-            // setTimeout(initializedVideoTag.goToNext, 14000);
-            //setTimeout(initializedVideoTag.goToPrevious, 13000);
-            // // user clicked on one specifically
-            // initializedVideoTag.goToIndex(/* the index of the one clickd */);
+                mikeMagicVideoPartyInstance = new MikesMagiVideoParty(videoTagFor,videoTagBack, options);
+
+            // setTimeout(function(){},4000);
+            // var videoTagFor = document.querySelector('#formov'),
+            //     videoTagBack = document.querySelector('#backmov'),
+            //     options = {
+            //         points : [
+            //             {
+            //                 timeIndex : 0
+            //             },
+            //             {
+            //                 timeIndex : 10
+            //             },
+            //             {
+            //                 timeIndex : 20
+            //             },
+            //             {
+            //                 timeIndex : 30
+            //             },
+            //             {
+            //                 timeIndex : 52
+            //             }
+            //         ]
+            //     },
+            //     reversedOptions = {
+            //         points : [
+            //             {
+            //                 timeIndex : 52
+            //             },
+            //             {
+            //                 timeIndex : 42
+            //             },
+            //             {
+            //                 timeIndex : 32
+            //             },
+            //             {
+            //                 timeIndex : 22
+            //             },
+            //             {
+            //                 timeIndex : 0
+            //             }
+            //         ]
+            //     },
+            //     initializedVideoTagFor = new VideoFastForward(videoTagFor, options),
+            //     initializedVideoTagBack = new VideoFastForward(videoTagBack, reversedOptions);
+            //
+            document.querySelector('#goToNext').addEventListener('click', function() {
+                mikeMagicVideoPartyInstance.goToNext();
+                // initializedVideoTagFor.goToNext();
+                // initializedVideoTagBack.skipToIndex(initializedVideoTagFor.getCurrentIndex());
+            });
+            //
+            document.querySelector('#goToPrevious').addEventListener('click', function(){
+               mikeMagicVideoPartyInstance.goToPrevious();
+                // initializedVideoTagBack.goToPrevious();
+                // initializedVideoTagFor.skipToIndex(initializedVideoTagBack.getCurrentIndex());
+            });
+            //
+            document.querySelector('#goToLast').addEventListener('click', function() {
+                mikeMagicVideoPartyInstance.goToIndex(4);
+                // initializedVideoTagFor.goToIndex(4);
+                // initializedVideoTagBack.skipToIndex(initializedVideoTagFor.getCurrentIndex());
+            });
+            //
+            // document.querySelector('#goToFirst').addEventListener('click', function() {
+            //     initializedVideoTagBack.goToIndex(0);
+            //     initializedVideoTagFor.skipToIndex(initializedVideoTagBack.getCurrentIndex());
+            // });
+            //
+            // document.querySelector('#skipToFirst').addEventListener('click', function() {
+            //     initializedVideoTagFor.skipToIndex(0);
+            //     initializedVideoTagBack.skipToIndex(initializedVideoTagFor.getCurrentIndex())
+            // });
+            //
+            // document.querySelector('#skipToLast').addEventListener('click', function() {
+            //     initializedVideoTagFor.skipToIndex(4);
+            //     initializedVideoTagBack.skipToIndex(4);
+            // });
+
         </script>
     </body>
 </html>
