@@ -43,7 +43,7 @@
                         }
                     ]
                 },
-                mikeMagicVideoPartyInstance = new MikesMagiVideoParty(videoTagFor,videoTagBack, options);
+                mikeMagicVideoPartyInstance = new MikesMagicVideoParty(videoTagFor,videoTagBack, options);
 
             // setTimeout(function(){},4000);
             // var videoTagFor = document.querySelector('#formov'),
@@ -107,20 +107,22 @@
                 // initializedVideoTagBack.skipToIndex(initializedVideoTagFor.getCurrentIndex());
             });
             //
-            // document.querySelector('#goToFirst').addEventListener('click', function() {
-            //     initializedVideoTagBack.goToIndex(0);
-            //     initializedVideoTagFor.skipToIndex(initializedVideoTagBack.getCurrentIndex());
-            // });
+            document.querySelector('#goToFirst').addEventListener('click', function() {
+                mikeMagicVideoPartyInstance.goToIndex(0);
+                // initializedVideoTagFor.skipToIndex(initializedVideoTagBack.getCurrentIndex());
+            });
             //
-            // document.querySelector('#skipToFirst').addEventListener('click', function() {
-            //     initializedVideoTagFor.skipToIndex(0);
-            //     initializedVideoTagBack.skipToIndex(initializedVideoTagFor.getCurrentIndex())
-            // });
-            //
-            // document.querySelector('#skipToLast').addEventListener('click', function() {
-            //     initializedVideoTagFor.skipToIndex(4);
-            //     initializedVideoTagBack.skipToIndex(4);
-            // });
+            document.querySelector('#skipToFirst').addEventListener('click', function() {
+                mikeMagicVideoPartyInstance.skipToIndex(0);
+                // initializedVideoTagFor.skipToIndex(0);
+                // initializedVideoTagBack.skipToIndex(initializedVideoTagFor.getCurrentIndex())
+            });
+
+            document.querySelector('#skipToLast').addEventListener('click', function() {
+                mikeMagicVideoPartyInstance.skipToIndex(4);
+                // initializedVideoTagFor.skipToIndex(4);
+                // initializedVideoTagBack.skipToIndex(4);
+            });
 
         </script>
     </body>
