@@ -1,0 +1,50 @@
+<html>
+    <head>
+    </head>
+    <body>
+        <video id="formov">
+            <source src="./trailer.mp4" type="video/mp4">
+        </video>
+        <video id="backmov">
+            <source src="./trailer.mp4" type="video/mp4">
+        </video>
+        <script src="bundle.js"></script>
+        <script>
+            setTimeout(function(){},4000);
+            var videoTagFor = document.querySelector('#formov'),
+                videoTagBack = document.querySelector('#backmov'),
+                options = {
+                    points : [
+                        {
+                            timeIndex : 0
+                        },
+                        {
+                            timeIndex : 10
+                        },
+                        {
+                            timeIndex : 20
+                        },
+                        {
+                            timeIndex : 30
+                        }
+                    ]
+                },
+                initializedVideoTagFor = new VideoFastForwardFor(videoTagFor, options),
+                initializedVideoTagBack = new VideoFastForwardRev(videoTagBack, options);
+            // // user scrolled up
+            setTimeout(initializedVideoTagFor.goToNext, 2000);
+            //setTimeout(initializedVideoTag.goToNext, 15000);
+            setTimeout(initializedVideoTagBack.goToNext, 14000);
+            // // user scrolled down
+            //setTimeout(initializedVideoTag.goToPrevious, 30000);
+            // initializedVideoTag.goToPrevious();
+            // setTimeout(function(){
+            //     initializedVideoTag.goToIndex(0)
+            // },13000);
+            // setTimeout(initializedVideoTag.goToNext, 14000);
+            //setTimeout(initializedVideoTag.goToPrevious, 13000);
+            // // user clicked on one specifically
+            // initializedVideoTag.goToIndex(/* the index of the one clickd */);
+        </script>
+    </body>
+</html>
