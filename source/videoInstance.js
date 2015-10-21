@@ -1,3 +1,5 @@
+var BB = require('bluebird');
+
 module.exports = VideoInstance;
 
 function VideoInstance(videoTag, options){
@@ -15,6 +17,9 @@ function VideoInstance(videoTag, options){
     this.goToPrevious = goToPrevious.bind(this);
     this.goToIndex = goToIndex.bind(this);
     this.skipToIndex = skipToIndex.bind(this);
+    this.setCurrentTime = setCurrentTime.bind(this);
+    this.getCurrentTime = getCurrentTime.bind(this);
+
 
     this.skipToIndex(this.currentIndex);
 
@@ -28,36 +33,41 @@ function getCurrentIndex() {
 }
 
 function goToNext() {
-    if(this.currentIndex < this.options.points.length - 1) { // the next index is not the last index.
-        animateToTimeIndex.call(this, this.options.points[this.currentIndex + 1].timeIndex);
-        this.currentIndex++;
-    }
+    return new BB(function(resolve, reject){
+        if(this.currentIndex < this.options.points.length - 1) { // the next index is not the last index.
+            animateToTimeIndex.call(this, this.options.points[this.currentIndex + 1].timeIndex)
+                .then(resolve);
+            this.currentIndex++;
+        } else {
+            reject();
+        }
+    }.bind(this));
 }
 
 function goToPrevious() {
-    this.goToIndex(this.currentIndex - 1);
+    var self = this;
+    return new BB(function(resolve,reject){
+        self.goToIndex(self.currentIndex - 1)
+            .then(resolve);
+    });
 }
 
 function goToIndex(indexToGoTo) {
-    var timeIndexToGoTo = this.options.points[indexToGoTo].timeIndex;
+    var self = this;
+    return new BB(function(resolve,reject){
+        var timeIndexToGoTo = self.options.points[indexToGoTo].timeIndex;
 
-    if(timeIndexToGoTo < this.videoTag.currentTime) {
-        this.videoTag.currentTime = timeIndexToGoTo;
-        this.currentIndex = indexToGoTo;
-    } else {
-        animateToTimeIndex.call(this, timeIndexToGoTo);
-        this.currentIndex = indexToGoTo;
-    }
+        if(timeIndexToGoTo < self.videoTag.currentTime) {
+            self.videoTag.currentTime = timeIndexToGoTo;
+            self.currentIndex = indexToGoTo;
+            resolve(timeIndexToGoTo);
+        } else {
+            animateToTimeIndex.call(self, timeIndexToGoTo)
+                .then(resolve);
+            self.currentIndex = indexToGoTo;
+        }
+    });
 
-    // if(indexToGoTo > this.currentIndex && indexToGoTo !== this.options.points.length) { // index is greater than the current but not the last
-    //     animateToTimeIndex.call(this, timeIndexToGoTo);
-    //     this.currentIndex = indexToGoTo;
-    // }
-    //
-    // if(indexToGoTo < this.currentIndex && indexToGoTo >= 0) { // index is less than the current but not the first
-    //     this.videoTag.currentTime = timeIndexToGoTo;
-    //     this.currentIndex = indexToGoTo;
-    // }
 }
 
 function skipToIndex(indexToSkipTo) {
@@ -72,25 +82,36 @@ function skipToIndex(indexToSkipTo) {
     }
 }
 
+function setCurrentTime(currentTimeToSet) {
+    this.videoTag.currentTime = currentTimeToSet;
+}
+
+function getCurrentTime() {
+    return this.videoTag.currentTime;
+}
+
 function animateToTimeIndex(timeIndex) {
-    var self = this;
+    return new BB(function(resolve,reject){
+        var self = this;
 
-    if(timeIndex > self.videoTag.currentTime){
-        this.animateToIndex = timeIndex;
-        this.videoTag.play();
-        window.cancelAnimationFrame(closureForward);
-        window.requestAnimationFrame(closureForward);
-    }
-
-    function closureForward() {
-        console.log('-----------');
-        console.log(self.animateToIndex);
-        if(self.animateToIndex <= self.videoTag.currentTime){
-            self.videoTag.pause();
+        if(timeIndex > self.videoTag.currentTime){
+            this.animateToIndex = timeIndex;
+            this.videoTag.play();
             window.cancelAnimationFrame(closureForward);
-            return;
-        } else {
             window.requestAnimationFrame(closureForward);
         }
-    }
+
+        function closureForward() {
+            console.log('-----------');
+            console.log(self.animateToIndex);
+            if(self.animateToIndex <= self.videoTag.currentTime){
+                self.videoTag.pause();
+                window.cancelAnimationFrame(closureForward);
+                resolve(self.videoTag.currentTime);
+                return;
+            } else {
+                window.requestAnimationFrame(closureForward);
+            }
+        }
+    }.bind(this));
 }
