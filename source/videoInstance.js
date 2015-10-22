@@ -1,11 +1,6 @@
 var BB = require('bluebird');
 
-module.exports = VideoInstance;
-
-function VideoInstance(videoTag, options){
-    // Throw Error if no video tag, and do simple validation on options.like, check for the index array.
-    // only start after the video tag is fully loaded.
-    // add tweening so the the ff and rr is smooth.
+module.exports = function VideoInstance(videoTag, options){
     this.videoTag = videoTag;
 
     this.options = options;
@@ -20,10 +15,7 @@ function VideoInstance(videoTag, options){
     this.setCurrentTime = setCurrentTime.bind(this);
     this.getCurrentTime = getCurrentTime.bind(this);
 
-
-    this.skipToIndex(this.currentIndex);
-
-    // console.log(this.options.points[this.currentIndex].timeIndex);
+    // this.skipToIndex(this.currentIndex);
 
     return this;
 }
@@ -102,8 +94,8 @@ function animateToTimeIndex(timeIndex) {
         }
 
         function closureForward() {
-            console.log('-----------');
-            console.log(self.animateToIndex);
+            // console.log('-----------');
+            // console.log(self.animateToIndex);
             if(self.animateToIndex <= self.videoTag.currentTime){
                 self.videoTag.pause();
                 window.cancelAnimationFrame(closureForward);

@@ -1,17 +1,10 @@
 var VideoInstance = require('./videoInstance.js'),
-    BB = require('bluebird'),
-    self = null;
+    BB = require('bluebird');
 
-module.exports = MikesMagicVideoParty;
-
-window.MikesMagicVideoParty = MikesMagicVideoParty;
-
-function MikesMagicVideoParty(videoTagForward, videoTagReverse, options) {
+module.exports = function MikesMagicVideoParty(videoTagForward, videoTagReverse, options) {
     var reversedOptions = {
             points :     generateReverseTimePoints(options.points)
         };
-
-
 
     this.videoForwardInstance = new VideoInstance(videoTagForward, options);
     this.videoReverseInstance = new VideoInstance(videoTagReverse, reversedOptions);
@@ -28,48 +21,40 @@ function MikesMagicVideoParty(videoTagForward, videoTagReverse, options) {
 }
 
 function goToNext() {
-    self = this;
+    var self = this;
+
     this.videoForwardInstance.goToNext()
-    .then(function(currentTime){
-        self.videoReverseInstance.skipToIndex(self.videoForwardInstance.getCurrentIndex());
-        self.videoReverseInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
-    });
+        .then(function(currentTime){
+            self.videoReverseInstance.skipToIndex(self.videoForwardInstance.getCurrentIndex());
+            self.videoReverseInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
+        });
 }
 
 function goToPrevious() {
-    self = this;
+    var self = this;
+
     this.videoReverseInstance.goToPrevious()
-    .then(function(currentTime){
-        self.videoForwardInstance.skipToIndex(self.videoReverseInstance.getCurrentIndex());
-        self.videoForwardInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
-    });
+        .then(function(currentTime){
+            self.videoForwardInstance.skipToIndex(self.videoReverseInstance.getCurrentIndex());
+            self.videoForwardInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
+        });
 }
 
 function goToIndex(index) {
-    self = this;
+    var self = this;
     if(index === self.videoForwardInstance.getCurrentIndex()){
-        return;
+        return new BB.resolve();
     } else if(index < self.videoForwardInstance.getCurrentIndex()){
-        self.videoReverseInstance.goToIndex(index)
+        return self.videoReverseInstance.goToIndex(index)
             .then(function(currentTime){
-                console.log(currentTime);
                 self.videoForwardInstance.skipToIndex(self.videoReverseInstance.getCurrentIndex());
                 self.videoForwardInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
-                console.log(self.videoReverseInstance.getCurrentTime());
-                console.log(self.videoForwardInstance.getCurrentTime());
             });
-        //
-
     } else {
-        self.videoForwardInstance.goToIndex(index)
+        return self.videoForwardInstance.goToIndex(index)
             .then(function(currentTime){
-                console.log(currentTime);
                 self.videoReverseInstance.skipToIndex(self.videoForwardInstance.getCurrentIndex());
                 self.videoReverseInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
-                console.log("time here");
-                console.log('should be ', self.totalVideoTimeLength - currentTime);
-                console.log(self.videoReverseInstance.getCurrentTime());
-                console.log(self.videoForwardInstance.getCurrentTime());
             });
     }
 }
