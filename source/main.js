@@ -28,7 +28,8 @@ function goToNext() {
         .then(function(currentTime){
             self.videoReverseInstance.skipToIndex(self.videoForwardInstance.getCurrentIndex());
             self.videoReverseInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
-        });
+        })
+        .catch(function() {});
 }
 
 function goToPrevious() {
@@ -38,7 +39,8 @@ function goToPrevious() {
         .then(function(currentTime){
             self.videoForwardInstance.skipToIndex(self.videoReverseInstance.getCurrentIndex());
             self.videoForwardInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
-        });
+        })
+        .catch(function() {});
 }
 
 function goToIndex(index) {
@@ -66,7 +68,7 @@ function skipToIndex(index){
 }
 
 function getCurrentIndex() {
-    this.videoReverseInstance.skipToIndex(this.videoForwardInstance.getCurrentIndex());
+    return this.videoForwardInstance.getCurrentIndex();
 }
 
 function getCurrentTime() {

@@ -35,11 +35,8 @@ function goToNext() {
 }
 
 function goToPrevious() {
-    var self = this;
-    return new BB(function(resolve,reject){
-        self.goToIndex(self.currentIndex - 1)
-            .then(resolve);
-    });
+    this.goToIndex(self.currentIndex - 1)
+        .then(resolve);
 }
 
 function goToIndex(indexToGoTo) {
