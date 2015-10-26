@@ -18,6 +18,8 @@ module.exports = function MikesMagicVideoParty(videoTagForward, videoTagReverse,
     this.getCurrentIndex = getCurrentIndex.bind(this);
     this.getCurrentTime = getCurrentTime.bind(this);
 
+    this.skipToIndex(0);
+
     return this;
 }
 
