@@ -35,7 +35,7 @@ function goToNext() {
 }
 
 function goToPrevious() {
-    return this.goToIndex(self.currentIndex - 1);
+    return this.goToIndex(this.currentIndex - 1);
 }
 
 function goToIndex(indexToGoTo) {
