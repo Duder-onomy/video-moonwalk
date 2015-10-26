@@ -15,8 +15,6 @@ module.exports = function VideoInstance(videoTag, options){
     this.setCurrentTime = setCurrentTime.bind(this);
     this.getCurrentTime = getCurrentTime.bind(this);
 
-    // this.skipToIndex(this.currentIndex);
-
     return this;
 }
 
@@ -94,8 +92,6 @@ function animateToTimeIndex(timeIndex) {
         }
 
         function closureForward() {
-            // console.log('-----------');
-            // console.log(self.animateToIndex);
             if(self.animateToIndex <= self.videoTag.currentTime){
                 self.videoTag.pause();
                 window.cancelAnimationFrame(closureForward);

@@ -16,6 +16,7 @@ module.exports = function MikesMagicVideoParty(videoTagForward, videoTagReverse,
     this.goToIndex = goToIndex.bind(this);
     this.skipToIndex = skipToIndex.bind(this);
     this.getCurrentIndex = getCurrentIndex.bind(this);
+    this.getCurrentTime = getCurrentTime.bind(this);
 
     return this;
 }
@@ -23,7 +24,7 @@ module.exports = function MikesMagicVideoParty(videoTagForward, videoTagReverse,
 function goToNext() {
     var self = this;
 
-    this.videoForwardInstance.goToNext()
+    return this.videoForwardInstance.goToNext()
         .then(function(currentTime){
             self.videoReverseInstance.skipToIndex(self.videoForwardInstance.getCurrentIndex());
             self.videoReverseInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
@@ -33,7 +34,7 @@ function goToNext() {
 function goToPrevious() {
     var self = this;
 
-    this.videoReverseInstance.goToPrevious()
+    return this.videoReverseInstance.goToPrevious()
         .then(function(currentTime){
             self.videoForwardInstance.skipToIndex(self.videoReverseInstance.getCurrentIndex());
             self.videoForwardInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
@@ -66,6 +67,10 @@ function skipToIndex(index){
 
 function getCurrentIndex() {
     this.videoReverseInstance.skipToIndex(this.videoForwardInstance.getCurrentIndex());
+}
+
+function getCurrentTime() {
+    return this.videoForwardInstance.getCurrentTime();
 }
 
 function generateReverseTimePoints(points){
