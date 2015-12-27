@@ -1,12 +1,23 @@
 {
-  "name": "mikes-magic-video-party",
+  "name": "video-moonwalk",
   "version": "1.0.1",
-  "description": "",
+  "description": "Scroll or jump through a html5 video forwards and backwards",
   "main": "./source/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Friendly Folks",
+  "contributors": [
+    "Mike Mostachetti",
+    "Greg Larrenaga"
+  ],
+  "keywords": [
+    "video",
+    "scroll",
+    "forward",
+    "reverse",
+    "html5"
+  ],
   "license": "ISC",
   "dependencies": {
     "bluebird": "^2.10.2",
