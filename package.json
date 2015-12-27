@@ -4,7 +4,7 @@
   "description": "Scroll or jump through a html5 video forwards and backwards",
   "main": "./source/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Yo\""
   },
   "author": "Friendly Folks",
   "contributors": [
