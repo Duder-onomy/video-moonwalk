@@ -4,4 +4,4 @@ trailer.mp4
 node_modules
 *.mp4
 /render/
-.idea
+.idea/
