@@ -1,4 +1,13 @@
-# mikes-magic-video-party
-js library to scroll through video both forwards and backwards
+# video-moonwalk
+js library for scrolling through a video both forwards and backwards.
+
+# install
+
+# example
+
+# usage
+
+
+
 
 
