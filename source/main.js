@@ -1,10 +1,11 @@
 var VideoInstance = require('./videoInstance.js'),
     BB = require('bluebird');
 
-module.exports = function MikesMagicVideoParty(videoTagForward, videoTagReverse, options) {
+module.exports = function VideoMoonwalk(videoTagForward, videoTagReverse, options){
+
     var reversedOptions = {
-            points :     generateReverseTimePoints(options.points)
-        };
+        points : generateReverseTimePoints(options.points)
+    };
 
     this.videoForwardInstance = new VideoInstance(videoTagForward, options);
     this.videoReverseInstance = new VideoInstance(videoTagReverse, reversedOptions);
@@ -47,6 +48,7 @@ function goToPrevious() {
 
 function goToIndex(index) {
     var self = this;
+
     if(index === self.videoForwardInstance.getCurrentIndex()){
         return new BB.resolve();
     } else if(index < self.videoForwardInstance.getCurrentIndex()){

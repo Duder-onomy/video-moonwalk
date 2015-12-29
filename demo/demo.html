@@ -1,0 +1,74 @@
+<html>
+    <head>
+    </head>
+    <body>
+
+        <video id="formov" width="320px" height="240px">
+            <source src="./test_video.mp4" type="video/mp4">
+        </video>
+
+        <button id='goToNext'>GO TO NEXT</button>
+        <button id='goToPrevious'>GO TO PREV</button>
+        <button id='goToLast'>GO TO LAST</button>
+        <button id='goToFirst'>GO TO FIRST</button>
+        <button id='skipToLast'>SKIP TO LAST</button>
+        <button id='skipToFirst'>SKIP TO FIRST</button>
+
+        <br>
+
+        <video id="backmov" width="320px" height="240px">
+            <source src="./test_video_reverse.mp4" type="video/mp4">
+        </video>
+
+        <script src="./bundle.js"></script>
+        <script>
+            var videoTagFor = document.querySelector('#formov'),
+                videoTagBack = document.querySelector('#backmov'),
+                options = {
+                    points : [
+                        {
+                            timeIndex : 0
+                        },
+                        {
+                            timeIndex : 4
+                        },
+                        {
+                            timeIndex : 6
+                        },
+                        {
+                            timeIndex : 14
+                        },
+                        {
+                            timeIndex : 21
+                        }
+                    ]
+                },
+                VideoMoonwalk = new VideoMoonwalk(videoTagFor,videoTagBack, options);
+
+            document.querySelector('#goToNext').addEventListener('click', function() {
+                VideoMoonwalk.goToNext();
+            });
+            //
+            document.querySelector('#goToPrevious').addEventListener('click', function(){
+                VideoMoonwalk.goToPrevious();
+            });
+            //
+            document.querySelector('#goToLast').addEventListener('click', function() {
+                VideoMoonwalk.goToIndex(3);
+            });
+            //
+            document.querySelector('#goToFirst').addEventListener('click', function() {
+                VideoMoonwalk.goToIndex(1);
+            });
+            //
+            document.querySelector('#skipToFirst').addEventListener('click', function() {
+                VideoMoonwalk.skipToIndex(0);
+            });
+
+            document.querySelector('#skipToLast').addEventListener('click', function() {
+                VideoMoonwalk.skipToIndex(options.points.length - 1);
+            });
+
+        </script>
+    </body>
+</html>

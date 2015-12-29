@@ -1,7 +1,7 @@
 {
   "name": "video-moonwalk",
   "version": "1.0.1",
-  "description": "Scroll or jump through a html5 video forwards and backwards",
+  "description": "Need to play and skip a video forwards and backwards seemelessly?",
   "main": "./source/main.js",
   "scripts": {
     "test": "echo \"Yo\""
@@ -16,14 +16,20 @@
     "scroll",
     "forward",
     "reverse",
-    "html5"
+    "html5",
+    "backwards",
+    "timepoint"
   ],
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mjmostachetti/video-moonwalk.git"
+  },
+  "license": "MIT",
   "dependencies": {
-    "bluebird": "^2.10.2",
-    "browserify": "^11.2.0"
+    "bluebird": "^2.10.2"
   },
   "devDependencies": {
+    "browserify": "^11.2.0",
     "watchify": "^3.4.0"
   }
 }
