@@ -1,7 +1,9 @@
 var VideoInstance = require('./videoInstance.js'),
     BB = require('bluebird');
 
-module.exports = function VideoMoonwalk(videoTagForward, videoTagReverse, options){
+module.exports = VideoMoonwalk;
+
+function VideoMoonwalk(videoTagForward, videoTagReverse, options){
 
     var reversedOptions = {
         points : generateReverseTimePoints(options.points)
