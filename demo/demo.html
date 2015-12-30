@@ -22,12 +22,14 @@
 
         <script src="./bundle.js"></script>
         <script>
+            // Select both videos
             var videoTagFor = document.querySelector('#formov'),
                 videoTagBack = document.querySelector('#backmov'),
+            // Select timepoints(secs) to make breakpoints in the video
                 options = {
                     points : [
                         {
-                            timeIndex : 0
+                            timeIndex : 0 // always zero
                         },
                         {
                             timeIndex : 4
@@ -39,11 +41,11 @@
                             timeIndex : 12
                         },
                         {
-                            timeIndex : 16.65
+                            timeIndex : 16.65 // total movie length
                         }
                     ]
-                },
-                    VideoMoonwalk = new VideoMoonwalk(videoTagFor,videoTagBack, options);
+				},
+				VideoMoonwalk = new VideoMoonwalk(videoTagFor,videoTagBack, options);
 
             document.querySelector('#goToNext').addEventListener('click', function() {
                 VideoMoonwalk.goToNext();
