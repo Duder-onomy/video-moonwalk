@@ -1,98 +1,103 @@
-// module.exports = VideoFastForward;
-//
-// window.VideoFastForward = VideoFastForward;
-//
-// function VideoFastForward(videoTag, options){
-//     // Throw Error if no video tag, and do simple validation on options.like, check for the index array.
-//     // only start after the video tag is fully loaded.
-//     // add tweening so the the ff and rr is smooth.
-//     this.videoTag = videoTag;
-//
-//     this.options = options;
-//
-//     this.currentIndex = 0;
-//
-//     this.getCurrentIndex = getCurrentIndex.bind(this);
-//     this.goToNext = goToNext.bind(this);
-//     this.goToPrevious = goToPrevious.bind(this);
-//     this.goToIndex = goToIndex.bind(this);
-//     this.skipToIndex = skipToIndex.bind(this);
-//
-//     this.skipToIndex(this.currentIndex);
-//
-//     console.log(this.options.points[this.currentIndex].timeIndex);
-//
-//     return this;
-// }
-//
-// function getCurrentIndex() {
-//     return this.currentIndex;
-// }
-//
-// function goToNext() {
-//     if(this.currentIndex < this.options.points.length - 1) { // the next index is not the last index.
-//         animateToTimeIndex.call(this, this.options.points[this.currentIndex + 1].timeIndex);
-//         this.currentIndex++;
-//     }
-// }
-//
-// function goToPrevious() {
-//     this.goToIndex(this.currentIndex - 1);
-// }
-//
-// function goToIndex(indexToGoTo) {
-//     var timeIndexToGoTo = this.options.points[indexToGoTo].timeIndex;
-//
-//     if(timeIndexToGoTo < this.videoTag.currentTime) {
-//         this.videoTag.currentTime = timeIndexToGoTo;
-//         this.currentIndex = indexToGoTo;
-//     } else {
-//         animateToTimeIndex.call(this, timeIndexToGoTo);
-//         this.currentIndex = indexToGoTo;
-//     }
-//
-//     // if(indexToGoTo > this.currentIndex && indexToGoTo !== this.options.points.length) { // index is greater than the current but not the last
-//     //     animateToTimeIndex.call(this, timeIndexToGoTo);
-//     //     this.currentIndex = indexToGoTo;
-//     // }
-//     //
-//     // if(indexToGoTo < this.currentIndex && indexToGoTo >= 0) { // index is less than the current but not the first
-//     //     this.videoTag.currentTime = timeIndexToGoTo;
-//     //     this.currentIndex = indexToGoTo;
-//     // }
-// }
-//
-// function skipToIndex(indexToSkipTo) {
-//     if(indexToSkipTo > this.currentIndex && indexToSkipTo !== this.options.points.length) { // index is greater than the current but not the last
-//         this.videoTag.currentTime = this.options.points[indexToSkipTo].timeIndex;
-//         this.currentIndex = indexToSkipTo;
-//     }
-//
-//     if(indexToSkipTo < this.currentIndex && indexToSkipTo >= 0) { // index is less than the current but not the first
-//         this.videoTag.currentTime = this.options.points[indexToSkipTo].timeIndex;
-//         this.currentIndex = indexToSkipTo;
-//     }
-// }
-//
-// function animateToTimeIndex(timeIndex) {
-//     var self = this;
-//
-//     if(timeIndex > self.videoTag.currentTime){
-//         this.animateToIndex = timeIndex;
-//         this.videoTag.play();
-//         window.cancelAnimationFrame(closureForward);
-//         window.requestAnimationFrame(closureForward);
-//     }
-//
-//     function closureForward() {
-//         console.log('-----------');
-//         console.log(self.animateToIndex);
-//         if(self.animateToIndex <= self.videoTag.currentTime){
-//             self.videoTag.pause();
-//             window.cancelAnimationFrame(closureForward);
-//             return;
-//         } else {
-//             window.requestAnimationFrame(closureForward);
-//         }
-//     }
-// }
+var VideoInstance = require('./source/videoInstance.js'),
+    BB = require('bluebird');
+
+module.exports = VideoMoonwalk;
+
+function VideoMoonwalk(videoTagForward, videoTagReverse, options){
+
+    var reversedOptions = {
+        points : generateReverseTimePoints(options.points)
+    };
+
+    this.videoForwardInstance = new VideoInstance(videoTagForward, options);
+    this.videoReverseInstance = new VideoInstance(videoTagReverse, reversedOptions);
+
+    this.totalVideoTimeLength = options.points.slice(-1)[0].timeIndex;
+
+    this.goToNext = goToNext.bind(this);
+    this.goToPrevious = goToPrevious.bind(this);
+    this.goToIndex = goToIndex.bind(this);
+    this.skipToIndex = skipToIndex.bind(this);
+    this.getCurrentIndex = getCurrentIndex.bind(this);
+    this.getCurrentTime = getCurrentTime.bind(this);
+
+    this.skipToIndex(0);
+
+    return this;
+}
+
+function goToNext() {
+    var self = this;
+
+    return this.videoForwardInstance.goToNext()
+        .then(function(currentTime){
+            self.videoReverseInstance.skipToIndex(self.videoForwardInstance.getCurrentIndex());
+            self.videoReverseInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
+        })
+        .catch(function() {});
+}
+
+function goToPrevious() {
+    var self = this;
+
+    return this.videoReverseInstance.goToPrevious()
+        .then(function(currentTime){
+            self.videoForwardInstance.skipToIndex(self.videoReverseInstance.getCurrentIndex());
+            self.videoForwardInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
+        })
+        .catch(function() {});
+}
+
+function goToIndex(index) {
+    var self = this;
+
+    if(index === self.videoForwardInstance.getCurrentIndex()){
+        return new BB.resolve();
+    } else if(index < self.videoForwardInstance.getCurrentIndex()){
+        return self.videoReverseInstance.goToIndex(index)
+            .then(function(currentTime){
+                self.videoForwardInstance.skipToIndex(self.videoReverseInstance.getCurrentIndex());
+                self.videoForwardInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
+            });
+    } else {
+        return self.videoForwardInstance.goToIndex(index)
+            .then(function(currentTime){
+                self.videoReverseInstance.skipToIndex(self.videoForwardInstance.getCurrentIndex());
+                self.videoReverseInstance.setCurrentTime(self.totalVideoTimeLength - currentTime);
+            });
+    }
+}
+
+function skipToIndex(index){
+    this.videoForwardInstance.skipToIndex(index);
+    this.videoReverseInstance.skipToIndex(this.videoForwardInstance.getCurrentIndex());
+}
+
+function getCurrentIndex() {
+    return this.videoForwardInstance.getCurrentIndex();
+}
+
+function getCurrentTime() {
+    return this.videoForwardInstance.getCurrentTime();
+}
+
+function generateReverseTimePoints(points){
+    var totalVideoTimeLength = points.slice(-1)[0].timeIndex,
+        reverseTimePointsArray = [],
+        remainderVideoTime;
+
+    points.forEach(function(point,index){
+        if(index === 0){
+            reverseTimePointsArray[index] = {
+                timeIndex : totalVideoTimeLength
+            };
+            remainderVideoTime = totalVideoTimeLength;
+        } else {
+            reverseTimePointsArray[index] = {
+                timeIndex : totalVideoTimeLength - (points[index].timeIndex - points[index-1].timeIndex)
+            };
+            totalVideoTimeLength -= (points[index].timeIndex - points[index-1].timeIndex);
+        }
+    });
+    return reverseTimePointsArray;
+}
