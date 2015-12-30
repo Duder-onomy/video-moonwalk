@@ -45,7 +45,7 @@
                         }
                     ]
 				},
-				VideoMoonwalk = new VideoMoonwalk(videoTagFor,videoTagBack, options);
+				VideoMoonwalk = new VideoMoonwalk(videoTagForwards,videoTagBackwards, options);
 
             document.querySelector('#goToNext').addEventListener('click', function() {
                 VideoMoonwalk.goToNext();
@@ -56,11 +56,11 @@
             });
             //
             document.querySelector('#goToLast').addEventListener('click', function() {
-                VideoMoonwalk.goToIndex(3);
+                VideoMoonwalk.goToIndex(options.points.length - 1);
             });
             //
             document.querySelector('#goToFirst').addEventListener('click', function() {
-                VideoMoonwalk.goToIndex(1);
+                VideoMoonwalk.goToIndex(0);
             });
             //
             document.querySelector('#skipToFirst').addEventListener('click', function() {
