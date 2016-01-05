@@ -68,7 +68,7 @@ VideoMoonwalk.skipToIndex(0)
 // Get index of forward movie
 VideoMoonwalk.getCurrentIndex()
 ```
-#### . getCurrentTime()
+#### .getCurrentTime()
 ```
 // Get current time(in seconds) of the forward video
 VideoMoonwalk.getCurrentTime()
