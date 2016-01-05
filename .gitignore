@@ -6,3 +6,4 @@ node_modules
 /render/
 .idea/
 demo/*.mp4
+npm-debug.log

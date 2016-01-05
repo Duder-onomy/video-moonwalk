@@ -1,5 +1,9 @@
 # video-moonwalk
-js library for scrolling through a video both forwards and backwards.
+
+#### Purpose
+
+This library was built to solve the problem of playing a movie forwards and backwards, to predefined time-points.
+In my example below you can scroll and click through sections within in a movie.
 
 [![Build Status](https://travis-ci.org/mjmostachetti/video-moonwalk.svg?branch=master)](https://travis-ci.org/mjmostachetti/video-moonwalk)
 
@@ -41,27 +45,40 @@ options = {
 #### .goToNext()
 ```
 // Play forward video, move position of backwards video
-VideoMoonwalk.goToNext();
+VideoMoonwalk.goToNext()
 ```
 #### .goToPrevious
 ```
 // Play backwards video, move position of forwards video
-VideoMoonwalk.goToPrevious();
+VideoMoonwalk.goToPrevious()
 ```
 #### .goToIndex(index)
 ```
-// Play either the forwards or backwards video to the correct Index, depending on the timepoint
+// Play either the forwards or backwards video to the correct index,
+// depending on the current time-point
 VideoMoonwalk.goToIndex(index)
 ```
 #### .skipToIndex(index)
 ```
 // Skip the forwards and backwards videos to the correct time indexes
-VideoMoonwalk.skipToIndex(0);)
+VideoMoonwalk.skipToIndex(0)
+```
+#### .getCurrentIndex()
+```
+// Get index of forward movie
+VideoMoonwalk.getCurrentIndex()
+```
+#### . getCurrentTime()
+```
+// Get current time(in seconds) of the forward video
+VideoMoonwalk.getCurrentTime()
 ```
 
 # Live Examples
 
 http://designworx.thinksolid.com/process
+
+Checkout the demo directory above for a simple visualization.
 
 
 
